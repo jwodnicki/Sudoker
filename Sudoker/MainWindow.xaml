@@ -1,0 +1,41 @@
+﻿<Window x:Class="Sudoker.MainWindow"
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:app="clr-namespace:Sudoker"
+				Name="window" Title="Sudoker" Width="466" Height="518" Icon="Titlebar.ico" ResizeMode="NoResize">
+	<Window.Resources>
+		<app:ColorConverter x:Key="colorConverter"/>
+		<app:WeightConverter x:Key="weightConverter"/>
+		<app:MutableConverter x:Key="mutableConverter"/>
+		<DataTemplate x:Key="InputCell">
+			<TextBox
+				Width="50" Height="50" MaxLength="1" FontSize="21" TextAlignment="Center" VerticalContentAlignment="Center"
+				Text="{Binding Path=Value}"
+				Tag="{Binding Path=Id}"
+				Foreground="{Binding Converter={StaticResource colorConverter},  Path=State}"
+				FontWeight="{Binding Converter={StaticResource weightConverter}, Path=State}"
+				IsReadOnly="{Binding Converter={StaticResource mutableConverter}, Path=State}"
+				app:SelectTextOnFocus.Active="True"
+				Initialized="SetBorder"
+				PreviewTextInput="AllowOnlyInt"
+				KeyUp="Explore"
+			/>
+		</DataTemplate>
+		<DataTemplate x:Key="InputGrid">
+			<ItemsControl ItemsSource="{Binding}" ItemTemplate="{DynamicResource InputCell}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Orientation="Horizontal" />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
+		</DataTemplate>
+	</Window.Resources>
+	<StackPanel>
+		<DockPanel>
+			<CheckBox Name="explorerCb" Content="Explorer Mode" ToolTip="Interactively solve the grid" Margin="7,0" IsChecked="True" VerticalAlignment="Center" />
+			<Button Content="SOLVE" Margin="4" HorizontalAlignment="Right" Click="Solve" />
+		</DockPanel>
+		<ItemsControl Name="grid" ItemTemplate="{DynamicResource InputGrid}" />
+	</StackPanel>
+</Window>

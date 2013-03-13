@@ -1,9 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
 
 namespace Sudoker
 {
-	class InputCell : INotifyPropertyChanged
+	class InputCell : ViewModel
 	{
 		public string Id { get; set; }
 
@@ -14,10 +13,7 @@ namespace Sudoker
 			set
 			{
 				_value = value;
-				if (PropertyChanged != null)
-				{
-					PropertyChanged(this, new PropertyChangedEventArgs("Value"));
-				}
+				NotifyPropertyChanged("Value");
 			}
 		}
 
@@ -31,10 +27,7 @@ namespace Sudoker
 				if (IsInvalid)     { _state |= 1 << 0; }
 				if (IsUserEntered) { _state |= 1 << 1; }
 				if (IsImmutable)   { _state |= 1 << 2; }
-				if (PropertyChanged != null)
-				{
-					PropertyChanged(this, new PropertyChangedEventArgs("State"));
-				}
+				NotifyPropertyChanged("State");
 			}
 		}
 		private bool _isInvalid;
@@ -73,16 +66,15 @@ namespace Sudoker
 			Id = row + "." + col;
 			Value = value > 0 ? (char)('0' + value) : ' ';
 		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
 	}
-	class InputGrid
+	class SudokerGrid
 	{
 		public InputCell[][] Grid;
+		public SolutionList SolutionList;
 		private Explorer Explorer;
 		private Solver Solver;
 
-		public InputGrid()
+		public SudokerGrid()
 		{
 			Grid = new InputCell[9][];
 			for (int row = 0; row < 9; row++)
@@ -93,19 +85,34 @@ namespace Sudoker
 					Set(row, col, 0);
 				}
 			}
-			Explorer = new Explorer(Grid);
-			Solver = new Solver(Grid);
+			SolutionList = new SolutionList();
+			Explorer = new Explorer(this);
+			Solver = new Solver(this, SolutionList);
 		}
 
 		public void Set(int row, int col, int value)
 		{
 			Grid[row][col] = new InputCell(row, col, value);
 		}
-
 		public void Set(int row, int col, int value, bool isImmutable)
 		{
 			Grid[row][col] = new InputCell(row, col, value);
 			Grid[row][col].IsImmutable = isImmutable;
+		}
+
+		public void ClearNonUserInput()
+		{
+			SolutionList.Clear();
+			for (int i = 0; i < 9; i++)
+			{
+				for (int j = 0; j < 9; j++)
+				{
+					if (!Grid[i][j].IsUserEntered && !Grid[i][j].IsImmutable)
+					{
+						Grid[i][j].Value = ' ';
+					}
+				}
+			}
 		}
 
 		public void Explore()
@@ -120,6 +127,11 @@ namespace Sudoker
 		public void Solve()
 		{
 			Solver.Solve();
+		}
+
+		public void ChooseSolution(int id)
+		{
+			Solver.ChooseSolution(id);
 		}
 	}
 }

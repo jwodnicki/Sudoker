@@ -7,21 +7,22 @@
 		<app:ColorConverter x:Key="colorConverter"/>
 		<app:WeightConverter x:Key="weightConverter"/>
 		<app:MutableConverter x:Key="mutableConverter"/>
+		<app:ComboVisibilityConverter x:Key="comboVisibilityConverter"/>
 		<DataTemplate x:Key="InputCell">
 			<TextBox
 				Width="50" Height="50" MaxLength="1" FontSize="21" TextAlignment="Center" VerticalContentAlignment="Center"
-				Text="{Binding Path=Value}"
-				Tag="{Binding Path=Id}"
-				Foreground="{Binding Converter={StaticResource colorConverter},  Path=State}"
-				FontWeight="{Binding Converter={StaticResource weightConverter}, Path=State}"
-				IsReadOnly="{Binding Converter={StaticResource mutableConverter}, Path=State}"
+				Text="{Binding Value}"
+				Tag="{Binding Id}"
+				Foreground="{Binding State, Converter={StaticResource colorConverter}}"
+				FontWeight="{Binding State, Converter={StaticResource weightConverter}}"
+				IsReadOnly="{Binding State, Converter={StaticResource mutableConverter}}"
 				app:SelectTextOnFocus.Active="True"
-				Initialized="SetBorder"
-				PreviewTextInput="AllowOnlyInt"
-				KeyUp="Explore"
+				Initialized="eventSetBorder"
+				PreviewTextInput="eventAllowOnlyInt"
+				KeyUp="eventExplore"
 			/>
 		</DataTemplate>
-		<DataTemplate x:Key="InputGrid">
+		<DataTemplate x:Key="SudokerGrid">
 			<ItemsControl ItemsSource="{Binding}" ItemTemplate="{DynamicResource InputCell}">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
@@ -34,8 +35,16 @@
 	<StackPanel>
 		<DockPanel>
 			<CheckBox Name="explorerCb" Content="Explorer Mode" ToolTip="Interactively solve the grid" Margin="7,0" IsChecked="True" VerticalAlignment="Center" />
-			<Button Content="SOLVE" Margin="4" HorizontalAlignment="Right" Click="Solve" />
+			<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+				<ComboBox Name="solutionChooser"
+					Width="40" Height="22"
+					ItemsSource="{Binding Solutions}" DisplayMemberPath="ID" SelectionChanged="eventChooseSolution" 
+					Visibility="{Binding HasItems, Converter={StaticResource comboVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				/>
+				<Button Content="SOLVE" Width="50" Height="22" Margin="4" Click="eventSolve" />
+				<Button Content="X" Width="16" Height="22" Margin="0,0,4,0" Click="eventClear" />
+			</StackPanel>
 		</DockPanel>
-		<ItemsControl Name="grid" ItemTemplate="{DynamicResource InputGrid}" />
+		<ItemsControl Name="grid" ItemTemplate="{DynamicResource SudokerGrid}" />
 	</StackPanel>
 </Window>

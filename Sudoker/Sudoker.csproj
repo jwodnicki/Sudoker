@@ -58,6 +58,7 @@
     <Compile Include="Explorer.cs" />
     <Compile Include="SelectTextOnFocus.cs" />
     <Compile Include="Solver.cs" />
+    <Compile Include="ViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

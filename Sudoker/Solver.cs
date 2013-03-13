@@ -1,19 +1,50 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
 namespace Sudoker
 {
+	class Solution
+	{
+		public int ID { get; set; }
+		public char[] Grid { get; set; }
+	}
+	class SolutionList : ViewModel
+	{
+		public ObservableCollection<Solution> Solutions { get; set; }
+
+		private int idSeq;
+		public SolutionList()
+		{
+			Solutions = new ObservableCollection<Solution>();
+			idSeq = 0;
+		}
+		public void Add(char[] grid)
+		{
+			Solutions.Add(new Solution() { ID = ++idSeq, Grid = grid });
+		}
+		public void Clear()
+		{
+			Solutions.Clear();
+			idSeq = 0;
+		}
+	}
+
 	class Solver
 	{
+		private SolutionList solutionList;
+		private SudokerGrid sGrid;
 		private InputCell[][] iGrid;
 		private char[] cGrid;
 		private BitVector32[] bRow;
 		private BitVector32[] bCol;
 		private BitVector32[] bBox;
 
-		public Solver(InputCell[][] grid)
+		public Solver(SudokerGrid grid, SolutionList solutions)
 		{
-			iGrid = grid;
+			sGrid = grid;
+			iGrid = grid.Grid;
+			solutionList = solutions;
 			bRow = new BitVector32[9];
 			bCol = new BitVector32[9];
 			bBox = new BitVector32[9];
@@ -41,27 +72,12 @@ namespace Sudoker
 			}
 
 			solve(0);
-
-			for (int i = 0; i < cGrid.Length; i++)
-			{
-				if (cGrid[i] == 0)
-				{
-					return;
-				}
-			}
-			for (int row = 0; row < 9; row++)
-			{
-				for (int col = 0; col < 9; col++)
-				{
-					iGrid[row][col].Value = cGrid[row * 9 + col];
-					iGrid[row][col].IsInvalid = false;
-				}
-			}
 		}
 		private bool solve(int pos)
 		{
 			if (pos == 81)
 			{
+				solutionList.Add((char[])cGrid.Clone());
 				return true;
 			}
 			if (cGrid[pos] != 0)
@@ -87,24 +103,39 @@ namespace Sudoker
 				bRow[row][val] = true;
 				bCol[col][val] = true;
 				bBox[box][val] = true;
+				cGrid[pos] = (char)(i + '1');
 				if (solve(pos + 1))
 				{
-					cGrid[pos] = (char)(i + '1');
-					return true;
+					continue;
 				}
 				else
 				{
 					bRow[row][val] = false;
 					bCol[col][val] = false;
 					bBox[box][val] = false;
+					cGrid[pos] = (char)0;
 				}
 			}
 
 			return false;
 		}
 
+		public void ChooseSolution(int id)
+		{
+			var cGrid = solutionList.Solutions[id - 1].Grid;
+			for (int row = 0; row < 9; row++)
+			{
+				for (int col = 0; col < 9; col++)
+				{
+					iGrid[row][col].Value = cGrid[row * 9 + col];
+					iGrid[row][col].IsInvalid = false;
+				}
+			}
+		}
+
 		private void initialize()
 		{
+			solutionList.Clear();
 			cGrid = new char[81];
 			for (int i = 0; i < 9; i++)
 			{
@@ -112,7 +143,7 @@ namespace Sudoker
 				bCol[i] = new BitVector32(0);
 				bBox[i] = new BitVector32(0);
 			}
+			sGrid.ClearNonUserInput();
 		}
-
 	}
 }

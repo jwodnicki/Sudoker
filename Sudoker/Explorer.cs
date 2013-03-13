@@ -5,12 +5,14 @@ namespace Sudoker
 {
 	class Explorer
 	{
+		private SudokerGrid sGrid;
 		private InputCell[][] iGrid;
 		private BitVector32[][] bGrid;
 
-		public Explorer(InputCell[][] grid)
+		public Explorer(SudokerGrid grid)
 		{
-			iGrid = grid;
+			sGrid = grid;
+			iGrid = grid.Grid;
 			bGrid = new BitVector32[9][];
 			for (int row = 0; row < 9; row++)
 			{
@@ -39,24 +41,13 @@ namespace Sudoker
 			{
 				iGrid[row][col].IsUserEntered = false;
 				iGrid[row][col].IsInvalid = false;
-				for (int i = 0; i < 9; i++)
-				{
-					for (int j = 0; j < 9; j++)
-					{
-						if (!iGrid[i][j].IsUserEntered && !iGrid[i][j].IsImmutable)
-						{
-							iGrid[i][j].Value = ' ';
-						}
-					}
-				}
-				oneBits();
-				Explore();
 			}
-			else
-			{
-				iGrid[row][col].Value = value;
-				Explore(row, col, value - '1');
-			}
+
+			iGrid[row][col].Value = value;
+
+			sGrid.ClearNonUserInput();
+			oneBits();
+			Explore();
 		}
 		public void Explore(int row, int col, int value)
 		{

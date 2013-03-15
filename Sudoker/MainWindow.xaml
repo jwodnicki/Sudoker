@@ -34,15 +34,16 @@
 	</Window.Resources>
 	<StackPanel>
 		<DockPanel>
-			<CheckBox Name="explorerCb" Content="Explorer Mode" ToolTip="Interactively solve the grid" Margin="7,0" IsChecked="True" VerticalAlignment="Center" />
+			<CheckBox Name="explorerCb" Content="Explorer Mode" Click="eventExploreSelect" ToolTip="Interactively solve the grid" Margin="7,0" IsChecked="True" VerticalAlignment="Center" />
 			<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 				<ComboBox Name="solutionChooser"
 					Width="40" Height="22"
 					ItemsSource="{Binding Solutions}" DisplayMemberPath="ID" SelectionChanged="eventChooseSolution" 
 					Visibility="{Binding HasItems, Converter={StaticResource comboVisibilityConverter}, RelativeSource={RelativeSource Self}}"
 				/>
-				<Button Content="SOLVE" Width="50" Height="22" Margin="4" Click="eventSolve" />
-				<Button Content="X" Width="16" Height="22" Margin="0,0,4,0" Click="eventClear" />
+				<Button Content="SOLVE"    Height="22" Padding="8,0" Margin="4,4,6,4" Click="eventSolve" />
+				<Button Content="GENERATE" Height="22" Padding="8,0" Margin="0,0,6,0" Click="eventGenerateRandom" />
+				<Button Content="CLEAR"    Height="22" Padding="8,0" Margin="0,0,4,0" Click="eventClearAll"/>
 			</StackPanel>
 		</DockPanel>
 		<ItemsControl Name="grid" ItemTemplate="{DynamicResource SudokerGrid}" />

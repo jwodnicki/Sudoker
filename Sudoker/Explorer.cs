@@ -39,13 +39,12 @@ namespace Sudoker
 		{
 			if (value == ' ')
 			{
-				iGrid[row][col].IsUserEntered = false;
-				iGrid[row][col].IsInvalid = false;
+				iGrid[row][col].Clear();
 			}
 
 			iGrid[row][col].Value = value;
 
-			sGrid.ClearNonUserInput();
+			sGrid.ClearNonInput();
 			oneBits();
 			Explore();
 		}

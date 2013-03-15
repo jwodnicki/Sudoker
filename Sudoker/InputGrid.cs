@@ -66,6 +66,13 @@ namespace Sudoker
 			Id = row + "." + col;
 			Value = value > 0 ? (char)('0' + value) : ' ';
 		}
+		public void Clear()
+		{
+			Value = ' ';
+			IsInvalid = false;
+			IsUserEntered = false;
+			IsImmutable = false;
+		}
 	}
 	class SudokerGrid
 	{
@@ -100,7 +107,19 @@ namespace Sudoker
 			Grid[row][col].IsImmutable = isImmutable;
 		}
 
-		public void ClearNonUserInput()
+		public void ClearAll()
+		{
+			SolutionList.Clear();
+			for (int i = 0; i < 9; i++)
+			{
+				for (int j = 0; j < 9; j++)
+				{
+					Grid[i][j].Clear();
+				}
+			}
+		}
+
+		public void ClearNonInput()
 		{
 			SolutionList.Clear();
 			for (int i = 0; i < 9; i++)
@@ -109,7 +128,7 @@ namespace Sudoker
 				{
 					if (!Grid[i][j].IsUserEntered && !Grid[i][j].IsImmutable)
 					{
-						Grid[i][j].Value = ' ';
+						Grid[i][j].Clear();
 					}
 				}
 			}
@@ -132,6 +151,11 @@ namespace Sudoker
 		public void ChooseSolution(int id)
 		{
 			Solver.ChooseSolution(id);
+		}
+
+		public void GenerateRandom()
+		{
+			Solver.GenerateRandom();
 		}
 	}
 }

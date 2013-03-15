@@ -53,11 +53,19 @@ namespace Sudoker
 		public void Solve()
 		{
 			initialize();
-
+			sGrid.ClearNonInput();
+			solve();
+		}
+		public void solve()
+		{
 			for (int row = 0; row < 9; row++)
 			{
 				for (int col = 0; col < 9; col++)
 				{
+					if (iGrid[row][col].IsInvalid)
+					{
+						return;
+					}
 					char cVal = iGrid[row][col].Value;
 					if (cVal.Equals(' '))
 					{
@@ -133,9 +141,60 @@ namespace Sudoker
 			}
 		}
 
+		public void GenerateRandom()
+		{
+			initialize();
+			sGrid.ClearAll();
+
+			int[] code = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+			Util.Shuffle(code);
+			for (int row = 0; row < 9; row++)
+			{
+				iGrid[row][0].Value = (char)('0' + code[row]);
+			}
+			Util.Shuffle(code, 3);
+			for (int col = 1; col < 7; col++)
+			{
+				iGrid[0][col].Value = (char)('0' + code[col + 2]);
+			}
+			iGrid[0][7].Value = (char)('0' + code[1]);
+			iGrid[0][8].Value = (char)('0' + code[2]);
+
+			solve();
+			ChooseSolution(Util.Random.Next(1, 1 + solutionList.Solutions.Count));
+
+			var iGridOrig = new char[9][];
+			for (int row = 0; row < 9; row++)
+			{
+				iGridOrig[row] = new char[9];
+				for (int col = 0; col < 9; col++)
+				{
+					iGridOrig[row][col] = iGrid[row][col].Value;
+				}
+			}
+
+			int numberOfCellsToFill = Util.Random.Next(15, 30);
+			for (int i = 0; i < numberOfCellsToFill; i++)
+			{
+				iGrid[Util.Random.Next(9)][Util.Random.Next(9)].IsImmutable = true;
+			}
+			for(;;)
+			{
+				Solve();
+				if (solutionList.Solutions.Count <= 1)
+				{
+					break;
+				}
+				int row = Util.Random.Next(9);
+				int col = Util.Random.Next(9);
+				iGrid[row][col].Value = iGridOrig[row][col];
+				iGrid[row][col].IsImmutable = true;
+			}
+			solutionList.Clear();
+		}
+
 		private void initialize()
 		{
-			solutionList.Clear();
 			cGrid = new char[81];
 			for (int i = 0; i < 9; i++)
 			{
@@ -143,7 +202,6 @@ namespace Sudoker
 				bCol[i] = new BitVector32(0);
 				bBox[i] = new BitVector32(0);
 			}
-			sGrid.ClearNonUserInput();
 		}
 	}
 }

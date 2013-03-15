@@ -98,15 +98,25 @@ namespace Sudoker
 			}
 		}
 
+		private void eventExploreSelect(object sender, EventArgs e)
+		{
+			SudokerGrid.Explore();
+		}
+
 		private void eventSolve(object sender, EventArgs e)
 		{
 			SudokerGrid.Solve();
 			solutionChooser.SelectedIndex = 0;
 		}
 
-		private void eventClear(object sender, EventArgs e)
+		private void eventGenerateRandom(object sender, EventArgs e)
 		{
-			SudokerGrid.ClearNonUserInput();
+			SudokerGrid.GenerateRandom();
+		}
+
+		private void eventClearAll(object sender, EventArgs e)
+		{
+			SudokerGrid.ClearAll();
 		}
 
 		private void eventChooseSolution(object sender, SelectionChangedEventArgs e)
@@ -115,7 +125,7 @@ namespace Sudoker
 			{
 				SudokerGrid.ChooseSolution(((Solution)e.AddedItems[0]).ID);
 			}
-			catch (Exception err) { }
+			catch { }
 		}
 
 		private void eventSetBorder(object sender, EventArgs e)

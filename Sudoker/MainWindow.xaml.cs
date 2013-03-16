@@ -30,32 +30,6 @@ namespace Sudoker
 			//		SudokerGrid.Set(i, j, (i * 3 + i / 3 + j) % 9 + 1, true);
 			//	}
 			//}
-			//SudokerGrid.Set(0, 0, 2, true);
-			//SudokerGrid.Set(1, 2, 5, true);
-			//SudokerGrid.Set(1, 8, 9, true);
-			//SudokerGrid.Set(2, 0, 6, true);
-			//SudokerGrid.Set(2, 2, 8, true);
-			//SudokerGrid.Set(2, 5, 9, true);
-			//SudokerGrid.Set(2, 6, 1, true);
-			//SudokerGrid.Set(3, 2, 9, true);
-			//SudokerGrid.Set(3, 3, 8, true);
-			//SudokerGrid.Set(3, 5, 7, true);
-			//SudokerGrid.Set(3, 7, 2, true);
-			//SudokerGrid.Set(3, 8, 3, true);
-			//SudokerGrid.Set(4, 3, 3, true);
-			//SudokerGrid.Set(4, 5, 1, true);
-			//SudokerGrid.Set(5, 0, 3, true);
-			//SudokerGrid.Set(5, 1, 7, true);
-			//SudokerGrid.Set(5, 3, 9, true);
-			//SudokerGrid.Set(5, 5, 2, true);
-			//SudokerGrid.Set(5, 6, 6, true);
-			//SudokerGrid.Set(6, 2, 2, true);
-			//SudokerGrid.Set(6, 3, 4, true);
-			//SudokerGrid.Set(6, 6, 7, true);
-			//SudokerGrid.Set(6, 8, 6, true);
-			//SudokerGrid.Set(7, 0, 7, true);
-			//SudokerGrid.Set(7, 6, 3, true);
-			//SudokerGrid.Set(8, 8, 4, true);
 		}
 
 		private void eventAllowOnlyInt(object sender, TextCompositionEventArgs e)

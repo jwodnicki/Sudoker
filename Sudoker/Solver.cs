@@ -181,7 +181,7 @@ namespace Sudoker
 			for(;;)
 			{
 				Solve();
-				if (solutionList.Solutions.Count <= 1)
+				if (solutionList.Solutions.Count <= 1 || numberOfCellsToFill > 50)
 				{
 					break;
 				}
@@ -189,6 +189,12 @@ namespace Sudoker
 				int col = Util.Random.Next(9);
 				iGrid[row][col].Value = iGridOrig[row][col];
 				iGrid[row][col].IsImmutable = true;
+				numberOfCellsToFill++;
+			}
+			if (numberOfCellsToFill > 50)
+			{
+				GenerateRandom();
+				return;
 			}
 			solutionList.Clear();
 		}

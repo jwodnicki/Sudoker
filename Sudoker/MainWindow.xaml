@@ -34,7 +34,7 @@
 	</Window.Resources>
 	<StackPanel>
 		<DockPanel>
-			<CheckBox Name="explorerCb" Content="Explorer Mode" Click="eventExploreSelect" ToolTip="Interactively solve the grid" Margin="7,0" IsChecked="True" VerticalAlignment="Center" />
+			<CheckBox Name="explorerCb" Content="Explorer Mode" Click="eventExploreSelect" ToolTip="Interactively solve the grid" Margin="7,0" VerticalAlignment="Center" />
 			<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 				<ComboBox Name="solutionChooser"
 					Width="40" Height="22"

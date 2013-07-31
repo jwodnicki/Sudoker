@@ -76,35 +76,35 @@ namespace Sudoker
 	}
 	class SudokerGrid
 	{
-		public InputCell[][] Grid;
+		public InputCell[][] Items;
 		public SolutionList SolutionList;
-		private Explorer Explorer;
-		private Solver Solver;
+		private Explorer explorer;
+		private Solver solver;
 
 		public SudokerGrid()
 		{
-			Grid = new InputCell[9][];
+			Items = new InputCell[9][];
 			for (int row = 0; row < 9; row++)
 			{
-				Grid[row] = new InputCell[9];
+				Items[row] = new InputCell[9];
 				for (int col = 0; col < 9; col++)
 				{
 					Set(row, col, 0);
 				}
 			}
 			SolutionList = new SolutionList();
-			Explorer = new Explorer(this);
-			Solver = new Solver(this, SolutionList);
+			explorer = new Explorer(this);
+			solver = new Solver(this, SolutionList);
 		}
 
 		public void Set(int row, int col, int value)
 		{
-			Grid[row][col] = new InputCell(row, col, value);
+			Items[row][col] = new InputCell(row, col, value);
 		}
 		public void Set(int row, int col, int value, bool isImmutable)
 		{
-			Grid[row][col] = new InputCell(row, col, value);
-			Grid[row][col].IsImmutable = isImmutable;
+			Items[row][col] = new InputCell(row, col, value);
+			Items[row][col].IsImmutable = isImmutable;
 		}
 
 		public void ClearAll()
@@ -114,7 +114,7 @@ namespace Sudoker
 			{
 				for (int j = 0; j < 9; j++)
 				{
-					Grid[i][j].Clear();
+					Items[i][j].Clear();
 				}
 			}
 		}
@@ -126,9 +126,9 @@ namespace Sudoker
 			{
 				for (int j = 0; j < 9; j++)
 				{
-					if (!Grid[i][j].IsUserEntered && !Grid[i][j].IsImmutable)
+					if (!Items[i][j].IsUserEntered && !Items[i][j].IsImmutable)
 					{
-						Grid[i][j].Clear();
+						Items[i][j].Clear();
 					}
 				}
 			}
@@ -136,26 +136,26 @@ namespace Sudoker
 
 		public void Explore()
 		{
-			Explorer.Explore();
+			explorer.Explore();
 		}
 		public void Explore(int row, int col, char value)
 		{
-			Explorer.Explore(row, col, value);
+			explorer.Explore(row, col, value);
 		}
 
 		public void Solve()
 		{
-			Solver.Solve();
+			solver.Solve();
 		}
 
 		public void ChooseSolution(int id)
 		{
-			Solver.ChooseSolution(id);
+			solver.ChooseSolution(id);
 		}
 
 		public void GenerateRandom()
 		{
-			Solver.GenerateRandom();
+			solver.GenerateRandom();
 		}
 	}
 }

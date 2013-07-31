@@ -17,9 +17,9 @@
 				FontWeight="{Binding State, Converter={StaticResource weightConverter}}"
 				IsReadOnly="{Binding State, Converter={StaticResource mutableConverter}}"
 				app:SelectTextOnFocus.Active="True"
-				Initialized="eventSetBorder"
-				PreviewTextInput="eventAllowOnlyInt"
-				KeyUp="eventExplore"
+				Initialized="SetBorder"
+				PreviewTextInput="AllowOnlyInt"
+				KeyUp="OnExplore"
 			/>
 		</DataTemplate>
 		<DataTemplate x:Key="SudokerGrid">
@@ -34,18 +34,18 @@
 	</Window.Resources>
 	<StackPanel>
 		<DockPanel>
-			<CheckBox Name="explorerCb" Content="Explorer Mode" Click="eventExploreSelect" ToolTip="Interactively solve the grid" Margin="7,0" VerticalAlignment="Center" />
+			<CheckBox Name="explorerCb" Content="Explorer Mode" Click="OnExploreSelect" ToolTip="Interactively solve the grid" Margin="7,0" VerticalAlignment="Center" />
 			<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 				<ComboBox Name="solutionChooser"
 					Width="40" Height="22"
-					ItemsSource="{Binding Solutions}" DisplayMemberPath="ID" SelectionChanged="eventChooseSolution" 
+					ItemsSource="{Binding Solutions}" DisplayMemberPath="ID" SelectionChanged="OnChooseSolution" 
 					Visibility="{Binding HasItems, Converter={StaticResource comboVisibilityConverter}, RelativeSource={RelativeSource Self}}"
 				/>
-				<Button Content="SOLVE"    Height="22" Padding="8,0" Margin="4,4,6,4" Click="eventSolve" />
-				<Button Content="GENERATE" Height="22" Padding="8,0" Margin="0,0,6,0" Click="eventGenerateRandom" />
-				<Button Content="CLEAR"    Height="22" Padding="8,0" Margin="0,0,4,0" Click="eventClearAll"/>
+				<Button Content="SOLVE"    Height="22" Padding="8,0" Margin="4,4,6,4" Click="OnSolve" />
+				<Button Content="GENERATE" Height="22" Padding="8,0" Margin="0,0,6,0" Click="OnGenerateRandom" />
+				<Button Content="CLEAR"    Height="22" Padding="8,0" Margin="0,0,4,0" Click="OnClearAll"/>
 			</StackPanel>
 		</DockPanel>
-		<ItemsControl Name="grid" ItemTemplate="{DynamicResource SudokerGrid}" />
+		<ItemsControl Name="uiGrid" ItemTemplate="{DynamicResource SudokerGrid}" />
 	</StackPanel>
 </Window>

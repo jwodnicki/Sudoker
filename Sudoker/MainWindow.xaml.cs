@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,25 +12,25 @@ namespace Sudoker
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private SudokerGrid SudokerGrid;
+		private SudokerGrid sudokerGrid;
 		public MainWindow()
 		{
 			InitializeComponent();
-			SudokerGrid = new SudokerGrid();
-			grid.ItemsSource = SudokerGrid.Grid;
-			solutionChooser.ItemsSource = SudokerGrid.SolutionList.Solutions;
-			SudokerGrid.Explore();
+			sudokerGrid = new SudokerGrid();
+			uiGrid.ItemsSource = sudokerGrid.Items;
+			solutionChooser.ItemsSource = sudokerGrid.SolutionList.Solutions;
+			sudokerGrid.Explore();
 
 			//for (int i = 1; i < 7; i++)
 			//{
 			//	for (int j = 1; j < 8; j++)
 			//	{
-			//		SudokerGrid.Set(i, j, (i * 3 + i / 3 + j) % 9 + 1, true);
+			//		sudokerGrid.Set(i, j, (i * 3 + i / 3 + j) % 9 + 1, true);
 			//	}
 			//}
 		}
 
-		private void eventAllowOnlyInt(object sender, TextCompositionEventArgs e)
+		private void AllowOnlyInt(object sender, TextCompositionEventArgs e)
 		{
 			if (!Char.IsDigit(e.Text[0]) || e.Text[0].Equals('0'))
 			{
@@ -45,7 +43,7 @@ namespace Sudoker
 			}
 		}
 
-		private void eventExplore(object sender, EventArgs e)
+		private void OnExplore(object sender, EventArgs e)
 		{
 			var textbox = (TextBox)sender;
 
@@ -58,12 +56,12 @@ namespace Sudoker
 			int r = Convert.ToInt32(rc[0]);
 			int c = Convert.ToInt32(rc[1]);
 
-			SudokerGrid.Grid[r][c].IsUserEntered = true;
+			sudokerGrid.Items[r][c].IsUserEntered = true;
 			bool wasDeleted = textbox.Text.Length == 0;
 
 			if (explorerCb.IsChecked == true)
 			{
-				SudokerGrid.Explore(r, c, wasDeleted ? ' ' : textbox.Text[0]);
+				sudokerGrid.Explore(r, c, wasDeleted ? ' ' : textbox.Text[0]);
 			}
 
 			if (wasDeleted)
@@ -72,37 +70,37 @@ namespace Sudoker
 			}
 		}
 
-		private void eventExploreSelect(object sender, EventArgs e)
+		private void OnExploreSelect(object sender, EventArgs e)
 		{
-			SudokerGrid.Explore();
+			sudokerGrid.Explore();
 		}
 
-		private void eventSolve(object sender, EventArgs e)
+		private void OnSolve(object sender, EventArgs e)
 		{
-			SudokerGrid.Solve();
+			sudokerGrid.Solve();
 			solutionChooser.SelectedIndex = 0;
 		}
 
-		private void eventGenerateRandom(object sender, EventArgs e)
+		private void OnGenerateRandom(object sender, EventArgs e)
 		{
-			SudokerGrid.GenerateRandom();
+			sudokerGrid.GenerateRandom();
 		}
 
-		private void eventClearAll(object sender, EventArgs e)
+		private void OnClearAll(object sender, EventArgs e)
 		{
-			SudokerGrid.ClearAll();
+			sudokerGrid.ClearAll();
 		}
 
-		private void eventChooseSolution(object sender, SelectionChangedEventArgs e)
+		private void OnChooseSolution(object sender, SelectionChangedEventArgs e)
 		{
 			try
 			{
-				SudokerGrid.ChooseSolution(((Solution)e.AddedItems[0]).ID);
+				sudokerGrid.ChooseSolution(((Solution)e.AddedItems[0]).ID);
 			}
 			catch { }
 		}
 
-		private void eventSetBorder(object sender, EventArgs e)
+		private void SetBorder(object sender, EventArgs e)
 		{
 			var textbox = (TextBox)sender;
 			string[] rc = textbox.Tag.ToString().Split('.');

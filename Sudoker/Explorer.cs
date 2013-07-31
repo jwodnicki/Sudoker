@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 
 namespace Sudoker
 {
@@ -12,13 +11,13 @@ namespace Sudoker
 		public Explorer(SudokerGrid grid)
 		{
 			sGrid = grid;
-			iGrid = grid.Grid;
+			iGrid = grid.Items;
 			bGrid = new BitVector32[9][];
 			for (int row = 0; row < 9; row++)
 			{
 				bGrid[row] = new BitVector32[9];
 			}
-			oneBits();
+			OneBits();
 		}
 
 		public void Explore()
@@ -45,7 +44,7 @@ namespace Sudoker
 			iGrid[row][col].Value = value;
 
 			sGrid.ClearNonInput();
-			oneBits();
+			OneBits();
 			Explore();
 		}
 		public void Explore(int row, int col, int value)
@@ -53,11 +52,11 @@ namespace Sudoker
 			iGrid[row][col].IsInvalid = !bGrid[row][col][1 << value];
 			if (!iGrid[row][col].IsInvalid)
 			{
-				removeNumber(row, col, value);
+				RemoveNumber(row, col, value);
 			}
 		}
 
-		private void removeNumber(int row, int col, int value)
+		private void RemoveNumber(int row, int col, int value)
 		{
 			char cValue = (char)(value + '1');
 			iGrid[row][col].Value = cValue;
@@ -74,7 +73,7 @@ namespace Sudoker
 						{
 							if (bGrid[i][col].Equals(new BitVector32(1 << j)))
 							{
-								removeNumber(i, col, j);
+								RemoveNumber(i, col, j);
 							}
 						}
 					}
@@ -93,7 +92,7 @@ namespace Sudoker
 						{
 							if (bGrid[row][i].Equals(new BitVector32(1 << j)))
 							{
-								removeNumber(row, i, j);
+								RemoveNumber(row, i, j);
 							}
 						}
 					}
@@ -119,7 +118,7 @@ namespace Sudoker
 							{
 								if (bGrid[i][j].Equals(new BitVector32(1 << k)))
 								{
-									removeNumber(i, j, k);
+									RemoveNumber(i, j, k);
 								}
 							}
 						}
@@ -133,7 +132,7 @@ namespace Sudoker
 			}
 		}
 
-		private void oneBits()
+		private void OneBits()
 		{
 			for (int row = 0; row < 9; row++)
 			{

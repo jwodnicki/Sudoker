@@ -43,7 +43,7 @@ namespace Sudoker
 		public Solver(SudokerGrid grid, SolutionList solutions)
 		{
 			sGrid = grid;
-			iGrid = grid.Grid;
+			iGrid = grid.Items;
 			solutionList = solutions;
 			bRow = new BitVector32[9];
 			bCol = new BitVector32[9];
@@ -52,7 +52,7 @@ namespace Sudoker
 
 		public void Solve()
 		{
-			initialize();
+			Initialize();
 			sGrid.ClearNonInput();
 			solve();
 		}
@@ -79,9 +79,9 @@ namespace Sudoker
 				}
 			}
 
-			solve(0);
+			Solve(0);
 		}
-		private bool solve(int pos)
+		private bool Solve(int pos)
 		{
 			if (pos == 81)
 			{
@@ -90,7 +90,7 @@ namespace Sudoker
 			}
 			if (cGrid[pos] != 0)
 			{
-				return solve(pos + 1);
+				return Solve(pos + 1);
 			}
 
 			int row = pos / 9;
@@ -112,7 +112,7 @@ namespace Sudoker
 				bCol[col][val] = true;
 				bBox[box][val] = true;
 				cGrid[pos] = (char)(i + '1');
-				if (solve(pos + 1))
+				if (Solve(pos + 1))
 				{
 					continue;
 				}
@@ -143,7 +143,7 @@ namespace Sudoker
 
 		public void GenerateRandom()
 		{
-			initialize();
+			Initialize();
 			sGrid.ClearAll();
 
 			int[] code = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -178,6 +178,7 @@ namespace Sudoker
 			{
 				iGrid[Util.Random.Next(9)][Util.Random.Next(9)].IsImmutable = true;
 			}
+
 			for(;;)
 			{
 				Solve();
@@ -199,7 +200,7 @@ namespace Sudoker
 			solutionList.Clear();
 		}
 
-		private void initialize()
+		private void Initialize()
 		{
 			cGrid = new char[81];
 			for (int i = 0; i < 9; i++)

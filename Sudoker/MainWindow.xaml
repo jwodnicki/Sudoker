@@ -23,7 +23,7 @@
 			/>
 		</DataTemplate>
 		<DataTemplate x:Key="SudokerGrid">
-			<ItemsControl ItemsSource="{Binding}" ItemTemplate="{DynamicResource InputCell}">
+			<ItemsControl ItemsSource="{Binding}" ItemTemplate="{StaticResource InputCell}">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
 						<StackPanel Orientation="Horizontal" />
@@ -46,6 +46,6 @@
 				<Button Content="CLEAR"    Height="22" Padding="8,0" Margin="0,0,4,0" Click="OnClearAll"/>
 			</StackPanel>
 		</DockPanel>
-		<ItemsControl Name="uiGrid" ItemTemplate="{DynamicResource SudokerGrid}" />
+		<ItemsControl Name="uiGrid" ItemTemplate="{StaticResource SudokerGrid}" />
 	</StackPanel>
 </Window>

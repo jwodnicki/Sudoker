@@ -50,13 +50,13 @@ namespace Sudoker
 			bBox = new BitVector32[9];
 		}
 
-		public void Solve()
+		public void Solve(int stopAfter)
 		{
 			Initialize();
 			sGrid.ClearNonInput();
-			solve();
+			SolveNoInit(stopAfter);
 		}
-		public void solve()
+		private void SolveNoInit(int stopAfter)
 		{
 			for (int row = 0; row < 9; row++)
 			{
@@ -78,10 +78,9 @@ namespace Sudoker
 					bBox[((row / 3) * 9 + col) / 3][val] = true;
 				}
 			}
-
-			Solve(0);
+			Solve(0, stopAfter);
 		}
-		private bool Solve(int pos)
+		private bool Solve(int pos, int stopAfter)
 		{
 			if (pos == 81)
 			{
@@ -90,7 +89,7 @@ namespace Sudoker
 			}
 			if (cGrid[pos] != 0)
 			{
-				return Solve(pos + 1);
+				return Solve(pos + 1, stopAfter);
 			}
 
 			int row = pos / 9;
@@ -112,9 +111,12 @@ namespace Sudoker
 				bCol[col][val] = true;
 				bBox[box][val] = true;
 				cGrid[pos] = (char)(i + '1');
-				if (Solve(pos + 1))
+				if (Solve(pos + 1, stopAfter))
 				{
-					continue;
+					if (stopAfter > 0 && solutionList.Solutions.Count >= stopAfter)
+					{
+						return false;
+					}
 				}
 				else
 				{
@@ -126,6 +128,12 @@ namespace Sudoker
 			}
 
 			return false;
+		}
+
+		private bool HasMultipleSolutions()
+		{
+			Solve(2);
+			return solutionList.Solutions.Count <= 1;
 		}
 
 		public void ChooseSolution(int id)
@@ -160,7 +168,7 @@ namespace Sudoker
 			iGrid[0][7].Value = (char)('0' + code[1]);
 			iGrid[0][8].Value = (char)('0' + code[2]);
 
-			solve();
+			SolveNoInit(-1);
 			ChooseSolution(Util.Random.Next(1, 1 + solutionList.Solutions.Count));
 
 			var iGridOrig = new char[9][];
@@ -179,10 +187,9 @@ namespace Sudoker
 				iGrid[Util.Random.Next(9)][Util.Random.Next(9)].IsImmutable = true;
 			}
 
-			for(;;)
+			for (; ; )
 			{
-				Solve();
-				if (solutionList.Solutions.Count <= 1 || numberOfCellsToFill > 50)
+				if (HasMultipleSolutions() || numberOfCellsToFill > 50)
 				{
 					break;
 				}

@@ -8,29 +8,6 @@
 		<app:WeightConverter x:Key="weightConverter"/>
 		<app:MutableConverter x:Key="mutableConverter"/>
 		<app:ComboVisibilityConverter x:Key="comboVisibilityConverter"/>
-		<DataTemplate x:Key="InputCell">
-			<TextBox
-				Width="50" Height="50" MaxLength="1" FontSize="21" TextAlignment="Center" VerticalContentAlignment="Center"
-				Text="{Binding Value}"
-				Tag="{Binding Id}"
-				Foreground="{Binding State, Converter={StaticResource colorConverter}}"
-				FontWeight="{Binding State, Converter={StaticResource weightConverter}}"
-				IsReadOnly="{Binding State, Converter={StaticResource mutableConverter}}"
-				app:SelectTextOnFocus.Active="True"
-				Initialized="SetBorder"
-				PreviewTextInput="AllowOnlyInt"
-				KeyUp="OnExplore"
-			/>
-		</DataTemplate>
-		<DataTemplate x:Key="SudokerGrid">
-			<ItemsControl ItemsSource="{Binding}" ItemTemplate="{StaticResource InputCell}">
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<StackPanel Orientation="Horizontal" />
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-			</ItemsControl>
-		</DataTemplate>
 	</Window.Resources>
 	<StackPanel>
 		<DockPanel>
@@ -46,6 +23,34 @@
 				<Button Content="CLEAR"    Height="22" Padding="8,0" Margin="0,0,4,0" Click="OnClearAll"/>
 			</StackPanel>
 		</DockPanel>
-		<ItemsControl Name="uiGrid" ItemTemplate="{StaticResource SudokerGrid}" />
+		<ItemsControl Name="uiGrid">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<ItemsControl ItemsSource="{Binding}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<TextBox
+									Width="50" Height="50" MaxLength="1" FontSize="21" TextAlignment="Center" VerticalContentAlignment="Center"
+									Text="{Binding Value}"
+									Tag="{Binding Id}"
+									Foreground="{Binding State, Converter={StaticResource colorConverter}}"
+									FontWeight="{Binding State, Converter={StaticResource weightConverter}}"
+									IsReadOnly="{Binding State, Converter={StaticResource mutableConverter}}"
+									app:SelectTextOnFocus.Active="True"
+									Initialized="SetBorder"
+									PreviewTextInput="AllowOnlyInt"
+									KeyUp="OnExplore"
+								/>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<StackPanel Orientation="Horizontal" />
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+					</ItemsControl>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
 	</StackPanel>
 </Window>

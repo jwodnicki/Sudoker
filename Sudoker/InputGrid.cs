@@ -145,7 +145,7 @@ namespace Sudoker
 
 		public void Solve()
 		{
-			solver.Solve();
+			solver.Solve(-1);
 		}
 
 		public void ChooseSolution(int id)
